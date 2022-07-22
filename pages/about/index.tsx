@@ -1,7 +1,12 @@
 import Router from "next/router";
-import { MainLayout } from "./../../components/MainLayout";
+import { MainLayout } from "../../components/MainLayout";
+import { MyTitle } from "../../interfaces/title";
 
-export default function About({ title }) {
+interface AboutPage {
+  title: MyTitle;
+}
+
+export default function About({ title }: AboutPage) {
   const linkClickHandler = () => {
     Router.push("/");
   };
@@ -9,9 +14,7 @@ export default function About({ title }) {
   return (
     <MainLayout title={"About Page"}>
       <h1>{title}</h1>
-      <button onClick={linkClickHandler}>
-        Home
-      </button>
+      <button onClick={linkClickHandler}>Home</button>
       <button
         onClick={() => {
           Router.push("/posts");
@@ -24,9 +27,7 @@ export default function About({ title }) {
 }
 
 About.getInitialProps = async () => {
-  const response = await fetch(
-    "http://localhost:4200/about"
-  );
-  const data = await response.json();
+  const response = await fetch("http://localhost:4200/about");
+  const data: MyTitle = await response.json();
   return { title: data.title };
 };

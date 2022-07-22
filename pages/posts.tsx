@@ -1,11 +1,17 @@
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import Link from "../node_modules/next/link";
 
-import { MainLayout } from "./../components/MainLayout";
+import { MainLayout } from "../components/MainLayout";
+import { MyPost } from "../interfaces/post";
+import { NextPageContext } from "../node_modules/next/dist/shared/lib/utils";
+
+interface PostsPostsProps {
+  posts: MyPost[];
+}
 
 export default function Posts({
   posts: serverPosts,
-}) {
+}: PostsPostsProps) {
   const [posts, setPosts] = useState(serverPosts);
 
   useEffect(() => {
@@ -36,10 +42,7 @@ export default function Posts({
       <ul>
         {posts.map((post) => (
           <li key={post.id}>
-            <Link
-              href={`/post/[postId]`}
-              as={`/post/${post.id}`}
-            >
+            <Link href={`/post/${post.id}`}>
               <a>{post.title}</a>
             </Link>
           </li>
@@ -49,14 +52,16 @@ export default function Posts({
   );
 }
 
-Posts.getInitialProps = async ({ req }) => {
+Posts.getInitialProps = async ({
+  req,
+}: NextPageContext) => {
   if (!req) {
     return { posts: null };
   }
   const response = await fetch(
     "http://localhost:4200/posts"
   );
-  const posts = await response.json();
+  const posts: MyPost[] = await response.json();
   return {
     posts,
   };
