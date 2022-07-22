@@ -10,9 +10,7 @@ interface PostPageProps {
   post: MyPost;
 }
 
-export default function Post({
-  post: serverPost,
-}: PostPageProps) {
+export default function Post({ post: serverPost }: PostPageProps) {
   const router = useRouter();
 
   const [post, setPost] = useState(serverPost);
@@ -20,7 +18,7 @@ export default function Post({
   useEffect(() => {
     async function load() {
       const response = await fetch(
-        `http://localhost:4200/posts/${router.query.postId}`
+        `${process.env.API_URL}/posts/${router.query.postId}`
       );
       const data = await response.json();
       setPost(data);
@@ -60,23 +58,17 @@ export default function Post({
 //   };
 // };
 
-interface PostNextPageContext
-  extends NextPageContext {
+interface PostNextPageContext extends NextPageContext {
   query: {
     postId: string;
   };
 }
 
-export async function getServerSideProps({
-  query,
-  req,
-}: PostNextPageContext) {
+export async function getServerSideProps({ query, req }: PostNextPageContext) {
   //   if (!req) {
   //     return { post: null };
   //   }
-  const response = await fetch(
-    `http://localhost:4200/posts/${query.postId}`
-  );
+  const response = await fetch(`${process.env.API_URL}/posts/${query.postId}`);
   const post: MyPost = await response.json();
   return {
     props: { post },

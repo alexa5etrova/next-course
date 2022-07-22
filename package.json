@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "concurrently": "^7.3.0",
+    "dotenv": "^16.0.1",
     "next": "latest",
     "nextjs-progressbar": "0.0.14",
     "react": "17.0.2",
